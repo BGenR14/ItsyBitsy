@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Spider.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Main.cs" type="Script" id=2]
+[ext_resource path="res://Water.tscn" type="PackedScene" id=3]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, -8.21405, -12.0283, 0, 0, 0, 0, 1014.47, -12.9203 )
+}
+
+[node name="Main" type="Node"]
+script = ExtResource( 2 )
+Mob = ExtResource( 3 )
+
+[node name="Spider" parent="." instance=ExtResource( 1 )]
+position = Vector2( 510.17, 526.819 )
+
+[node name="WaterSpawnTime" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="StartPosition" type="Position2D" parent="."]
+position = Vector2( 240, 450 )
+
+[node name="WaterPath" type="Path2D" parent="."]
+position = Vector2( 9.48004, 12.8568 )
+curve = SubResource( 1 )
+
+[node name="WaterSpawnLocation" type="PathFollow2D" parent="WaterPath"]
+position = Vector2( -1.76114, -2.62831 )
+[connection signal="Hit" from="Spider" to="." method="NewGame"]
+[connection signal="Hit" from="Spider" to="." method="GameOver"]
+[connection signal="body_entered" from="Spider" to="Spider" method="_on_Spider_body_entered"]
+[connection signal="timeout" from="WaterSpawnTime" to="." method="OnWaterSpawnTimeTimeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="OnScoreTimerTimeout"]
+[connection signal="timeout" from="StartTimer" to="." method="OnStartTimerTimeout"]
